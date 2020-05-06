@@ -1,0 +1,75 @@
+import os
+import sys
+
+#workflow for input file - POGENOM - step2 one bam file -prefilt
+#usage: snakemake -s snakefiles/step1_read_counts_mergeable --config mag_name="Genome_name"
+
+#-----DATA ---names-----------------------------------------------------------
+configfile: "./config_files/Euka_RNA_Input_POGENOM_config.json"
+workdir: config["workdir"]
+mapqual = config["mapqual"]
+thrs = config["threads"]
+mags_ext = config["genomes_ext"]
+prefix_MAGs = config["mag_name"]
+min_coverage = config["min_coverage"]
+min_breadth = config["min_breadth"]
+bq = config["min_bsq_for_cov_median_calculation"]
+params_dir = "_".join(["params","cov", str(min_coverage), "bdth", str(min_breadth), "mpq", str(mapqual), "bq", str(bq)])
+dataset=config["dataset"]
+
+#------Functions
+
+def files_mergeables_per_mag(dataset, params_dir, mag):
+    mergable_files = []
+    samples_list = []
+    MAGs_dir = os.path.join(config["workdir"], "04_mergeable", dataset, params_dir, mag)
+    bam_files = [b for b in os.listdir(MAGs_dir) if b.endswith(".bam")]
+    for bam in bam_files:
+        mergable_files.append(os.path.join("04_mergeable", dataset, params_dir, mag, bam))
+        samples_list.append(bam.split(mag)[0][:-1])
+
+    return mergable_files, samples_list
+
+def bam_files_per_mag(dataset, mag):
+    my_bam_files = []
+    bam_samples = []
+    bam_dir = os.path.join(config["workdir"], "02_MAPPING", dataset, mag)
+    bam_files = [b for b in os.listdir(bam_dir) if b.endswith(".bam")]
+    for bam in bam_files:
+      my_bam_files.append(os.path.join("02_MAPPING", dataset, mag, bam))
+      bam_samples.append(bam.split(mag)[0][:-1])
+
+    return my_bam_files, bam_samples
+
+files, samples = files_mergeables_per_mag(dataset, params_dir, prefix_MAGs)
+bam_files, bam_samples = bam_files_per_mag(dataset, prefix_MAGs)
+#------------------
+rule all:
+   input: expand("COUNTS/{dataset}/{prefix_mag}/{sample}_{prefix_mag}_mpq_{mapqual}.count", dataset = dataset, prefix_mag = prefix_MAGs, mapqual = mapqual, sample = bam_samples)
+
+rule all_m:
+  input: expand("COUNTS/{dataset}/{params_dir}/{prefix_mag}/{sample}_{prefix_mag}.count", params_dir = params_dir, dataset = dataset, prefix_mag = prefix_MAGs, sample = samples)
+
+rule readcounts_mergeable:
+  input: bam = files,
+         gff = expand("RAW_DATA/gff_files/{dataset}/{prefix_mag}.gff", dataset = dataset, prefix_mag = prefix_MAGs)
+  output: expand("COUNTS/{{dataset}}/{{params_dir}}/{{prefix_mag}}/{{sample}}_{{prefix_mag}}.count", params_dir = params_dir, dataset = dataset, prefix_mag = prefix_MAGs, sample = samples)
+  log: expand("COUNTS/log_htseq_count/{{dataset}}/{{params_dir}}/{{prefix_mag}}/{{sample}}_{{prefix_mag}}.log", params_dir = params_dir, dataset = dataset, prefix_mag = prefix_MAGs, sample = samples)
+  params: bam = "04_mergeable/{dataset}/{params_dir}/{prefix_mag}/{sample}_{prefix_mag}_RG_sorted_position_subsampled.bam",
+          gff = "RAW_DATA/gff_files/{dataset}/{prefix_mag}.gff",
+          htseq_params = config["htseq_params"],
+          outp = "COUNTS/{dataset}/{params_dir}/{prefix_mag}/{sample}_{prefix_mag}.count"
+  message: "Counting Reads - input files:\n{params.bam}\n{params.gff}"
+  shell: """samtools view -h {params.bam} | htseq-count {params.htseq_params} - {params.gff} | grep -v "^__" | tr -d "#" > {params.outp} && 2> {log}"""
+
+rule readcounts:
+  input: bam = bam_files,
+         gff = expand("RAW_DATA/gff_files/{dataset}/{prefix_mag}.gff", dataset = dataset, prefix_mag = prefix_MAGs)
+  output: expand("COUNTS/{{dataset}}/{{prefix_mag}}/{{sample}}_{{prefix_mag}}_mpq_{{mapqual}}.count", dataset = dataset, prefix_mag = prefix_MAGs, mapqual = mapqual, sample = bam_samples)
+  log: expand("COUNTS/log_htseq_count/{{dataset}}/{{prefix_mag}}/{{sample}}_{{prefix_mag}}_mpq_{{mapqual}}.log", dataset = dataset, prefix_mag = prefix_MAGs, mapqual = mapqual, sample = bam_samples)
+  params: bam = "02_MAPPING/{dataset}/{prefix_mag}/{sample}_{prefix_mag}_mpq_{mapqual}_RG_sorted_position.bam",
+          gff = "RAW_DATA/gff_files/{dataset}/{prefix_mag}.gff",
+          htseq_params = config["htseq_params"],
+          outp = "COUNTS/{dataset}/{prefix_mag}/{sample}_{prefix_mag}_mpq_{mapqual}.count"
+  message: "Reads count input files:\n{params.bam}\n{params.gff}"
+  shell: """samtools view -h {params.bam} | htseq-count {params.htseq_params} - {params.gff} | grep -v "^__" | tr -d "#" > {params.outp} && 2> {log}"""
