@@ -93,7 +93,7 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
                   samples=$(echo $line | cut -d " " -f2)
                   echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Genome: $mag - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth %"
                   snakemake -s snakefiles/Euka_RNA_step_pogenom_input step1_all --config my_mag="$mag" my_samples="$samples" -j $threads $extra_params 2> log_files/$dataset.$mag.coverage_breadth.log
-                  if [[ "$read_counts_per_gene" == yes ]] && [ -f $workdir/RAW_DATA/gff_files/$dataset/$mag.gff ]; then
+                  if [[ "$read_counts_per_gene" == TRUE ]] && [ -f $workdir/RAW_DATA/gff_files/$dataset/$mag.gff ]; then
                      if [ ! -z "$( ls -A 04_mergeable/"$dataset"_prefilt/params_cov_"$min_coverage"_bdth_"$min_breadth"_mpq_"$mapqual"_bq_"$min_bsq_for_cov_median_calculation"/$mag/*.bam)" ]; then
                          snakemake -s snakefiles/Euka_RNA_step_pogenom_input readcounts_mergeable_all --config my_mag="$mag" my_samples="$samples" -j $threads $extra_params 2> log_files/$dataset.$mag.prefilt_readcounts.log
                          echo "INFO: Counting reads analysis has been performed using the BAM file(s) in 04_mergeable/"$dataset"_prefilt/params_cov_"$min_coverage"_bdth_"$min_breadth"_mpq_"$mapqual"_bq_"$min_bsq_for_cov_median_calculation"/$mag/"
@@ -122,7 +122,7 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
 rm temporal
 exit 0
 fi
-#---End of prefilt mode
+#---End of mode prefilt 
 #---Option when analysing a dataset without prefilt
 cd $workdir
 echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth %"
