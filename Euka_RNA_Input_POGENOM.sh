@@ -66,18 +66,18 @@ if [[ $snakemake_extra_params == *","* ]]; then extra_params=$( echo $snakemake_
 echo "INFO: Starting Euka_RNA_Input_POGENOM pipeline - Working directory: $workdir"
 #----Using prefilt mode - full workflow
 mkdir -p $workdir/log_files
-if  [[ "$mode" == prefilt ]]; then
+if  [[ "$mode_prefilt" == TRUE ]]; then
 #Checking key parameters setting
 options2=("$fraction" "$temp_sub_Reads_dir")
-for p in "${options2[@]}"; do if [ -z "$p" ]; then echo 'A key parameter in "mode" : "prefilt" is undefined, please check in the config_files/Euka_RNA_Input_POGENOM_config.json file the parameters used'; exit 1; fi; done
-if [[ "$read_counts_per_gene" == yes ]] && [ -z "$htseq_params" ]; then echo 'The key parameter "htseq_params" is undefined, please check in the config_files/Euka_RNA_Input_POGENOM_config.json file the parameters used'; exit 1; fi
+for p in "${options2[@]}"; do if [ -z "$p" ]; then echo 'A key parameter in "mode_prefilt" is undefined, please check in the config_files/Euka_RNA_Input_POGENOM_config.json file the parameters used'; exit 1; fi; done
+if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'The key parameter "htseq_params" is undefined, please check in the config_files/Euka_RNA_Input_POGENOM_config.json file the parameters used'; exit 1; fi
 # main - mode prefilt
          cd $workdir
          echo "INFO: Generating Reads subsets - Fraction used $fraction"
          bash src/create_prefilt_Reads_subdir.sh $fraction $genomes_ext $reads_ext $temp_sub_Reads_dir $dataset
          echo "INFO: Calculating Genome Median coverage - sub-samples - Median coverage threshold $min_coverage"
          snakemake -s snakefiles/Euka_RNA_step_filter -j $threads $extra_params 2>log_files/samples_filter_$dataset.log
-         if [[ "$remove_subreads" == yes ]] && test -d "$temp_sub_Reads_dir/Reads"; then
+         if [[ "$remove_subreads" == TRUE ]] && test -d "$temp_sub_Reads_dir/Reads"; then
               echo "WARNING: You have chosen to remove $temp_sub_Reads_dir/Reads/"
               rm -rf $temp_sub_Reads_dir/Reads/
          fi
@@ -102,7 +102,7 @@ if [[ "$read_counts_per_gene" == yes ]] && [ -z "$htseq_params" ]; then echo 'Th
                          echo "INFO: Counting reads analysis has been performed using the all BAM files in 02_MAPPING/"$dataset"_prefilt/$mag/"
                      fi
                   else
-                    echo "Warning: Counting reads analysis was no realised on Genome $mag"; if [ $read_counts_per_gene == yes ]; then echo "         please provide the required gff file: $workdir/RAW_DATA/gff_files/$dataset/$mag.gff"; fi
+                    echo "Warning: Counting reads analysis was no realised on Genome $mag"; if [ $read_counts_per_gene == TRUE ]; then echo "         please provide the required gff file: $workdir/RAW_DATA/gff_files/$dataset/$mag.gff"; fi
                   fi
                   echo "INFO: Generating VCF files - Genome $mag"
                   snakemake -s snakefiles/Euka_RNA_step_pogenom_input vcf --config my_mag="$mag" my_samples="$samples" -j $threads $extra_params 2> log_files/$dataset.$mag"_vcf_files.log"
@@ -129,7 +129,7 @@ echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset -
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input step1_all -j $threads $extra_params 2> log_files/$dataset"_Genomes_coverage_breadth.log"
 echo "INFO: Generating VCF files"
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input vcf -j $threads $extra_params 2> log_files/$dataset"_Genomes_vcf_files.log"
-if [[ "$read_counts_per_gene" == yes ]]; then
+if [[ "$read_counts_per_gene" == TRUE ]]; then
     mergeable_dir="$workdir/04_mergeable/$dataset/params_cov_"$min_coverage"_bdth_"$min_breadth"_mpq_"$mapqual"_bq_"$min_bsq_for_cov_median_calculation
     MAGs=( $(ls -d $mergeable_dir/* ) )
     for m in "${MAGs[@]}"
