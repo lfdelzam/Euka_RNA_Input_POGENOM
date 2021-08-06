@@ -4,8 +4,9 @@ Test - Adapting Input pogenom pipeline to RNA seqs and eukaryotic genomes (Pipel
 Installation
 ============
 
-List of required software/packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+List of required software/packages:
+
+
 
 - `snakemake <https://snakemake.readthedocs.io/en/stable/>`_
 - `hisat2 <http://daehwankimlab.github.io/hisat2/>`_
@@ -19,7 +20,7 @@ List of required software/packages
 - `python <https://www.python.org/>`_
 
 Installing the pipeline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 The easiest and recommended way to install this pipeline is through conda in an isolated environment.
 Below an example of how to install Miniconda3 (on Linux) and how to set up the pipeline (including its required software) in an environment:
@@ -65,7 +66,7 @@ Usage
 =====
 
 Organise your data
-^^^^^^^^^^^^^^^^^^
+------------------
 
 The pipeline is capable of analysing several datasets with samples (paired fastq read files) and several genomes (fasta files). The minimum data required is one dataset with one pair of read files (forward and reverse) and one genome.
 
@@ -140,7 +141,7 @@ Make sure that genome names follow the syntax::
     
 
 Run the pipeline
-^^^^^^^^^^^^^^^^
+----------------
 
 If you are using conda, activate the pipeline environment by typing::
 
