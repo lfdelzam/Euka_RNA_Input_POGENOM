@@ -119,7 +119,7 @@ Make sure that genome names follow the syntax::
     <genome_name><genome_ext>, e.g., P6071_521_bin125.fa, where genome_name = P6071_521_bin125, and genome_ext = .fa
 
 
-3. gff_files (optional, required if "read_counts_per_gene": "yes")
+3. gff_files (optional, required if "read_counts_per_gene": "TRUE")
 
 Go to the directory cd Euka_RNA_Input_POGENOM/RAW_DATA/gff_files/::
 
@@ -217,9 +217,9 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
   Here it selects only paired reads (-f 2) and avoids optical duplicates, read unmapped, not primary alignment and supplementary alignment (-F 3332).
   If no filters are required, then set an empty string ("samtools_view_alignment_extra_filters": "",)
 
-"read_counts_per_gene": "no",
+"read_counts_per_gene": "FALSE",
  
-"htseq_params": "-s no -t CDS -i ID -m intersection-nonempty", It is required when "read_counts_per_gene": "yes". 
+"htseq_params": "-s no -t CDS -i ID -m intersection-nonempty", It is required when "read_counts_per_gene": "TRUE". 
 
 "freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15",
   Parameters used during variant calling.
