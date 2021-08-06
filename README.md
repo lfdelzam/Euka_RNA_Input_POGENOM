@@ -1,11 +1,12 @@
 # Euka_RNA_Input_POGENOM
-Test - Adapting Input pogenom pipeline to RNA seqs and eukaryotic genomes
+Test - Adapting Input pogenom pipeline to RNA seqs and eukaryotic genomes (Pipeline in development) 
 
 Installation
 ============
 
 List of required software/packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - `snakemake <https://snakemake.readthedocs.io/en/stable/>`_
 - `hisat2 <http://daehwankimlab.github.io/hisat2/>`_
 - `htseq <https://htseq.readthedocs.io/en/master/>`_
@@ -19,6 +20,7 @@ List of required software/packages
 
 Installing the pipeline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The easiest and recommended way to install this pipeline is through conda in an isolated environment.
 Below an example of how to install Miniconda3 (on Linux) and how to set up the pipeline (including its required software) in an environment:
 
@@ -139,6 +141,7 @@ Make sure that genome names follow the syntax::
 
 Run the pipeline
 ^^^^^^^^^^^^^^^^
+
 If you are using conda, activate the pipeline environment by typing::
 
     conda activate RNA_Euka_ip_env
@@ -249,7 +252,4 @@ If you need to set a different path to the config file ( flag -d=<absolute path 
 If you are using conda, before exiting the workflow, the environment needs to be deactivated using the following command::
 
     conda deactivate
-
-
-
 
