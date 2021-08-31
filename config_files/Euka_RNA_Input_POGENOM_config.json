@@ -4,7 +4,7 @@
   "min_coverage": 1,
   "min_breadth": 0.001,
   "min_bsq_for_cov_median_calculation": 15,
-  "mode_prefilt": "TRUE",
+  "mode_prefilt": "FALSE",
   "fraction": "0.10",
   "temp_sub_Reads_dir": "PREFILT",
   "remove_subreads": "FALSE",
