@@ -39,16 +39,17 @@ mkdir -p Genome_sizes
 echo "genome size:" $positions > Genome_sizes/$mag.size
 
 #---breadth
-non_zero=$(cut -f4 $mpileupfile | grep -cvw "0")
-breadth=$(echo $non_zero*100/$positions | bc -l )
+#non_zero=$(cut -f4 $mpileupfile | grep -cvw "0")
+#breadth=$(echo $non_zero*100/$positions | bc -l )
+breadth=$(cut -f4 $mpileupfile | grep -cvw "0")
 
 if [ -f $wkd/RAW_DATA/gff_files/$direct/$mag.gff ]; then
   ExonBS=$( grep "exon" $wkd/RAW_DATA/gff_files/$direct/$mag.gff | awk '{ FS = "\t" } ; BEGIN{L=0}; {L=L+$5-$4+1}; END {print L}')
   echo "Exon bs:" $ExonBS >> Genome_sizes/$mag.size
-  breadth=$(echo $non_zero*100/$ExonBS | bc -l )
-  echo "Genome:" $mag "- Sample:" $samplename "Median_coverage:" $cov " breadth (Exons) %:" $breadth
+  breadthExP=$(echo $breadth*100/$ExonBS | bc -l )
+  echo "Genome:" $mag "- Sample:" $samplename "Median_coverage:" $cov " breadth (bs):" $breadth "breadth (Exons, %):" $breadthExP
 else
-  echo "Genome:" $mag "- Sample:" $samplename "Median_coverage:" $cov " breadth %:" $breadth
+  echo "Genome:" $mag "- Sample:" $samplename "Median_coverage:" $cov " breadth (bs):" $breadth
 fi
 
 mkdir -p 04_mergeable/$dataset/$pdir/$mag
