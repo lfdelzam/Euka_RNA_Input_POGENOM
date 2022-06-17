@@ -34,7 +34,6 @@ else
 fi
 
 positions=$( grep -v ">" $wkd/RAW_DATA/Genomes/$direct/$mag.* | tr -d "\n" | wc -c)
-#positions=$( printf "%.f\n" $(hisat2-inspect -s $wkd/01_INDEXING/$direct/$mag/$mag | awk '{ FS = "\t" } ; BEGIN{L=0}; {L=L+$3}; END{print L}'))
 
 mkdir -p Genome_sizes
 echo "genome size:" $positions > Genome_sizes/$mag.size
