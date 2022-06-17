@@ -179,7 +179,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 "remove_subreads": "FALSE",
   If ``"TRUE"`` the directory of subsampled reads (i.e., ``<temp_sub_Reads_dir>/Reads/``) will be removed after usage. This directory is created during sample prescreening, when "mode_prefilt" is used.
 
-"min_coverage": 1,
+"min_coverage": 10,
   Minimum median coverage depth per sample per genome. Integer. Sample/genome combinations below this threshold will not be included in the subsequent analysis.
   It cannot be empty.
 
