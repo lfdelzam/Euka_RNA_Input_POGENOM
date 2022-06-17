@@ -92,6 +92,7 @@ rule selection:
   params:  mincov = int(config["min_coverage"]),
            fraction = float(config["fraction"]),
            dir = os.path.join("PREFILT", config["dataset"], "03_MPILEUP", mpileup_dir),
-           out = os.path.join("PREFILT", config["dataset"], params_dir)
+           out = os.path.join("PREFILT", config["dataset"], params_dir),
+           min_breadthbs=int(config["min_breadth"])
   message: "Selecting Samples with higher median coverage then {params.mincov} per Genome"
-  shell: "python src/parse_subsample_median_cov.py -i {params.dir} -o {params.out} -f {params.fraction} -t {params.mincov}"
+  shell: "python src/parse_subsample_median_cov.py -i {params.dir} -o {params.out} -f {params.fraction} -t {params.mincov} -b {params.min_breadthbs}"
