@@ -42,7 +42,7 @@ rule readcounts_mergeable_all:
          expand("COUNTS/{dataset}_prefilt/{params_dir}/{prefix_mag}/{sample}_{prefix_mag}.count", dataset = dataset, prefix_mag = prefix_MAGs, params_dir = params_dir, sample = samples)
 
 rule mapping:
-  input: expand("01_INDEXING/{dataset}/{prefix_mag}/{prefix_mag}.{suffix1}.ht2", dataset = dataset, suffix1 = range(1,8), prefix_mag = prefix_MAGs),
+  input: expand("01_INDEXING/{dataset}/{prefix_mag}/{prefix_mag}.{suffix1}.ht2l", dataset = dataset, suffix1 = range(1,8), prefix_mag = prefix_MAGs),
          fwd = expand("RAW_DATA/Reads/{dataset}/{sample}{fwdi}{reads_ext}", dataset=dataset, sample=samples, reads_ext = reads_ext, fwdi=config["fwd_index"]),
          rev = expand("RAW_DATA/Reads/{dataset}/{sample}{revi}{reads_ext}", dataset=dataset, sample= samples, reads_ext =reads_ext, revi=config["rev_index"])
   output: temp(expand("02_MAPPING/{{dataset}}_prefilt/{{prefix_mag}}/{{sample}}_{{prefix_mag}}_mpq_{mapqual}_sorted_position.bam", dataset = dataset, prefix_mag = prefix_MAGs, mapqual = mapqual, sample = samples))
