@@ -77,7 +77,7 @@ rule indexing_reads_mapping:
   params: input="02_MAPPING/{dataset}_prefilt/{prefix_mag}/{sample}_{prefix_mag}_mpq_{mapqual}_RG_sorted_position.bam"
   threads: config["threads"]
   message: "indexing sorted reads mapping from {params.input}"
-  shell: "samtools index {params.input} -@ {threads}"
+  shell: "samtools index {params.input}"
 
 rule mpileup_and_coverage:
   input: expand("02_MAPPING/{dataset}_prefilt/{prefix_mag}/{sample}_{prefix_mag}_mpq_{mapqual}_RG_sorted_position.bam", dataset = dataset, prefix_mag = prefix_MAGs, mapqual = mapqual, sample = samples)
