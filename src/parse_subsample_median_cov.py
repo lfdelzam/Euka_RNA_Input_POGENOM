@@ -14,13 +14,15 @@ parser.add_argument('-i', dest='inf', help='input Genome directory', required=Tr
 parser.add_argument('-o', dest='out', help='output directory', required=True)
 parser.add_argument('-f', dest='f', help='fraction used when subsampling, e.g., "0.10"', required=True)
 parser.add_argument('-t', dest='t', help='Median coverage threshold, e.g., "10"', required=True)
+parser.add_argument('-b', dest='b', help='breadth threshold, e.g., "10000"', required=True)
 
 args = parser.parse_args()
 
 MAG_list = [os.path.basename(d.path) for d in os.scandir(args.inf) if d.is_dir()]
 
 with open(os.path.join(args.out, "Estimated_median_cov_per_sample.tsv"), "w") as fout1, open(os.path.join(args.out, "Selected_samples_Genomes.txt"), "w") as fout2:
-    print("#Genome", "Sample", "Estimated_median_cov", sep="\t", file=fout1)
+    #print("#Genome", "Sample", "Estimated_median_cov", sep="\t", file=fout1)
+    print("#Genome", "Sample", "Estimated_median_cov", "Estimated_breadth_>_mincov", sep="\t", file=fout1)
     print("***** Selected Genomes and samples *****")
     for m in MAG_list:
         selected_sample_list = []
@@ -35,8 +37,12 @@ with open(os.path.join(args.out, "Estimated_median_cov_per_sample.tsv"), "w") as
                     col = int(line.split()[3])
                     if col != 0:
                         value.append(col)
-                print(m, sample, float(np.median(value)/float(args.f)), sep="\t", file=fout1)
-                if float(np.median(value)/float(args.f)) > float(args.t):
+                #print(m, sample, float(np.median(value)/float(args.f)), sep="\t", file=fout1)
+                #if float(np.median(value)/float(args.f)) > float(args.t): 
+                value_est=[ float(v)/float(args.f) for v in value ]
+                value_sel=[c for c in value_est if c >= float(args.t)]
+                print(m, sample, float(np.median(value)/float(args.f)),len(value_sel), sep="\t", file=fout1)
+                if len(value_sel) >= int(args.b):
                     selected_sample_list.append(sample)
 
         if len(selected_sample_list) != 0:
