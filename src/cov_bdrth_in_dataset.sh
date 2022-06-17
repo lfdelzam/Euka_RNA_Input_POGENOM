@@ -53,12 +53,17 @@ else
 fi
 
 mkdir -p 04_mergeable/$dataset/$pdir/$mag
+bs_higherthan_min_cov=$(cut -f4 $mpileupfile | grep -vw "0" | sort -n | awk -v min=$mincov ' {if ($1 >= min) ++n} END { print n }')
 
-#---selection of BAM files and subsample
-if (( $(echo "$breadth >= $minbreadth" | bc -l) )) && (( $(echo "$cov >= $mincov" | bc -l) )); then
+#---selection of BAM files and subsample -old
+#if (( $(echo "$breadth >= $minbreadth" | bc -l) )) && (( $(echo "$cov >= $mincov" | bc -l) )); then
 #  limite=$(echo "scale=3; $mincov/$cov" | bc )
 #  samp=$(echo "scale=3; ($limite)+10" | bc)
 #  samtools view -Sbh --threads $threads -s $samp $bamfile | samtools sort -o $outbamfile --threads $threads
+
+#---selection of BAM files
+if (( $(echo "$bs_higherthan_min_cov >= $minbreadth" | bc -l) )); then
+
  samtools sort -o $outbamfile --threads $threads $bamfile
 
 fi
