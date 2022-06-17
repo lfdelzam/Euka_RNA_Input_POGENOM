@@ -13,7 +13,7 @@
   "reads_ext": ".fq.gz",
   "fwd_index": "_R1",
   "rev_index": "_R2",
-  "hisat2_params": "--ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.01 --min-intronlen 20 --max-intronlen 1000",
+  "hisat2_params": "--ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.02 --min-intronlen 20 --max-intronlen 1000",
   "mapqual": 20,
   "samtools_view_alignment_extra_filters": "-f 2 -F 3332",
   "read_counts_per_gene": "FALSE",
