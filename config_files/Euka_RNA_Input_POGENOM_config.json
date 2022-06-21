@@ -1,6 +1,6 @@
 {
-  "workdir": "/Users/luisdelgado/Documents/Euka_RNA_Input_POGENOM",
-  "dataset": "TEST_large",
+  "workdir": "/abs/path/to/Euka_RNA_Input_POGENOM",
+  "dataset": "TEST",
   "min_coverage": 10,
   "min_breadth": 10000,
   "min_bsq_for_cov_median_calculation": 15,
@@ -8,7 +8,7 @@
   "fraction": "0.15",
   "temp_sub_Reads_dir": "PREFILT",
   "remove_subreads": "FALSE",
-  "threads": 8,
+  "threads": 20,
   "genomes_ext": ".fa",
   "reads_ext": ".fq.gz",
   "fwd_index": "_R1",
