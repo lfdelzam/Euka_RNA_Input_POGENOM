@@ -38,15 +38,16 @@ with open(os.path.join(args.out, "Estimated_median_cov_per_sample.tsv"), "w") as
                     if col != 0:
                         value.append(col)
                 #print(m, sample, float(np.median(value)/float(args.f)), sep="\t", file=fout1)
-                #if float(np.median(value)/float(args.f)) > float(args.t): 
+                #if float(np.median(value)/float(args.f)) > float(args.t):
                 value_est=[ float(v)/float(args.f) for v in value ]
                 value_sel=[c for c in value_est if c >= float(args.t)]
                 print(m, sample, float(np.median(value)/float(args.f)),len(value_sel), sep="\t", file=fout1)
-                if len(value_sel) >= int(args.b):
+                Estimated_br=len(value_sel) + int(int(args.b)*(0.15)) # plus a correction factor
+                if Estimated_br >= int(args.b):
                     selected_sample_list.append(sample)
 
         if len(selected_sample_list) != 0:
             print("      Genome: {} SAMPLE(S): {}".format(m, " ".join(map(str, selected_sample_list))))
             print(m, ",".join(map(str, selected_sample_list)), sep="\t", file=fout2)
         else:
-            print("#{} has not sample with Estimated Median coverage higher then threshold".format(m), file=fout2)
+            print("#{} has not sample with Estimated coverage and breadth higher then thresholds".format(m), file=fout2)

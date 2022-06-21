@@ -75,7 +75,7 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
          cd $workdir
          echo "INFO: Generating Reads subsets - Fraction used $fraction"
          bash src/create_prefilt_Reads_subdir.sh $fraction $genomes_ext $reads_ext $temp_sub_Reads_dir $dataset
-         echo "INFO: Calculating Genome Median coverage - sub-samples - Median coverage threshold $min_coverage"
+         echo "INFO: Calculating Genome coverage - sub-samples - Coverage threshold $min_coverage"
          snakemake -s snakefiles/Euka_RNA_step_filter -j $threads $extra_params 2>log_files/samples_filter_$dataset.log
          if [[ "$remove_subreads" == TRUE ]] && test -d "$temp_sub_Reads_dir/Reads"; then
               echo "WARNING: You have chosen to remove $temp_sub_Reads_dir/Reads/"
@@ -85,13 +85,13 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
         # if [ -s $result_dir/Selected_samples_Genomes.txt ]; then
              file_empty=$(grep -v "#" $result_dir/Selected_samples_Genomes.txt | wc -l)
              if [ "$file_empty" -eq 0 ]; then
-                echo -e "INFO: With the current parameter setting: Dataset $dataset - Fraction $fraction - Median coverage threshold $min_coverage - Min-base quality $min_bsq_for_cov_median_calculation - Mapping quality $mapqual\n      There is no Genome - sample with Estimated Median Coverage higher than threshold.\n      A vcf file cannot be created\n"
+                echo -e "INFO: With the current parameter setting: Dataset $dataset - Fraction $fraction - Coverage threshold $min_coverage - Min-base quality $min_bsq_for_cov_median_calculation - Mapping quality $mapqual\n      There is no Genome - sample with Estimated Median Coverage higher than threshold.\n      A vcf file cannot be created\n"
              else
                 grep -v "#" $result_dir/Selected_samples_Genomes.txt | while read line
                 do
                   mag=$(echo $line | cut -d " " -f1)
                   samples=$(echo $line | cut -d " " -f2)
-                  echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Genome: $mag - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth %"
+                  echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Genome: $mag - Coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
                   snakemake -s snakefiles/Euka_RNA_step_pogenom_input step1_all --config my_mag="$mag" my_samples="$samples" -j $threads $extra_params 2> log_files/$dataset.$mag.coverage_breadth.log
                   if [[ "$read_counts_per_gene" == TRUE ]] && [ -f $workdir/RAW_DATA/gff_files/$dataset/$mag.gff ]; then
                      if [ ! -z "$( ls -A 04_mergeable/"$dataset"_prefilt/params_cov_"$min_coverage"_bdth_"$min_breadth"_mpq_"$mapqual"_bq_"$min_bsq_for_cov_median_calculation"/$mag/*.bam)" ]; then
@@ -122,10 +122,10 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
 rm temporal
 exit 0
 fi
-#---End of mode prefilt 
+#---End of mode prefilt
 #---Option when analysing a dataset without prefilt
 cd $workdir
-echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth %"
+echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input step1_all -j $threads $extra_params 2> log_files/$dataset"_Genomes_coverage_breadth.log"
 echo "INFO: Generating VCF files"
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input vcf -j $threads $extra_params 2> log_files/$dataset"_Genomes_vcf_files.log"

@@ -64,7 +64,7 @@ rule freebayes:
              qual=config["vcffilter_qual"]
      message: "Generating vcf file on {params.mag} using parameters {params.pr} and vcffilter {params.qual}"
      shell: """
-                samtools index {params.bam} -@ {threads}
+                samtools index {params.bam}
                 freebayes -f {params.mag} {params.bam} {params.pr} | vcffilter -f {params.qual} > {params.out}
                 vcfsamplenames {params.out} > {params.log}
             """
