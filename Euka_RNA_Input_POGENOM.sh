@@ -91,7 +91,11 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
                 do
                   mag=$(echo $line | cut -d " " -f1)
                   samples=$(echo $line | cut -d " " -f2)
+<<<<<<< HEAD
                   echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Genome: $mag - Coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
+=======
+                  echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Genome: $mag - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
+>>>>>>> a8cad084431f54cb8fcc2e6609cb7bb0b0fd4541
                   snakemake -s snakefiles/Euka_RNA_step_pogenom_input step1_all --config my_mag="$mag" my_samples="$samples" -j $threads $extra_params 2> log_files/$dataset.$mag.coverage_breadth.log
                   if [[ "$read_counts_per_gene" == TRUE ]] && [ -f $workdir/RAW_DATA/gff_files/$dataset/$mag.gff ]; then
                      if [ ! -z "$( ls -A 04_mergeable/"$dataset"_prefilt/params_cov_"$min_coverage"_bdth_"$min_breadth"_mpq_"$mapqual"_bq_"$min_bsq_for_cov_median_calculation"/$mag/*.bam)" ]; then
@@ -125,7 +129,11 @@ fi
 #---End of mode prefilt
 #---Option when analysing a dataset without prefilt
 cd $workdir
+<<<<<<< HEAD
 echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
+=======
+echo "INFO: Calculating Genome Median coverage and breadth - Dataset: $dataset - Median coverage threshold: $min_coverage - Breadth threshold: $min_breadth "
+>>>>>>> a8cad084431f54cb8fcc2e6609cb7bb0b0fd4541
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input step1_all -j $threads $extra_params 2> log_files/$dataset"_Genomes_coverage_breadth.log"
 echo "INFO: Generating VCF files"
    snakemake -s snakefiles/Euka_RNA_step1_pogenom_input vcf -j $threads $extra_params 2> log_files/$dataset"_Genomes_vcf_files.log"
