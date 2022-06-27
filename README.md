@@ -218,7 +218,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 
 "read_counts_per_gene": "FALSE",
  
-"htseq_params": "-s no -t exon -i ID -m intersection-nonempty --nonunique all --supplementary-alignments ignore", It is required when "read_counts_per_gene": "TRUE". 
+"htseq_params": "-s no -t exon -i ID -m union --nonunique all --supplementary-alignments ignore", It is required when "read_counts_per_gene": "TRUE". 
 
 "freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15",
   Parameters used during variant calling.
