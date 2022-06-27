@@ -204,7 +204,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 "rev_index": "_R2",
   Index used to define reverse reads.
 
-"hisat2_params": "--ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.03 --min-intronlen 20 --max-intronlen 1000",
+"hisat2_params": "--ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.03 --min-intronlen 20 --max-intronlen 500000",
   hisat2 mapping parameters. The –score-min then gives the minimum score that is allowed to report an alignment.
   Here, it represents a 97% identity threshold.
 
@@ -213,12 +213,12 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 
 "samtools_view_alignment_extra_filters": "-f 2 -F 3084",
   Filters used for selecting mapped reads to be included in the BAM file.
-  Here it selects only paired reads (-f 2) and avoids optical duplicates, read and mate unmapped, suplementary alignment (-F 3084).
+  Here it selects only paired reads (-f 2) and avoids optical duplicates, read and mate unmapped, supplementary alignments (-F 3084).
   If no filters are required, then set an empty string ("samtools_view_alignment_extra_filters": "",)
 
 "read_counts_per_gene": "FALSE",
  
-"htseq_params": "-s no -t CDS -i ID -m intersection-nonempty", It is required when "read_counts_per_gene": "TRUE". 
+"htseq_params": "-s no -t exon -i ID -m intersection-nonempty --nonunique all --supplementary-alignments ignore", It is required when "read_counts_per_gene": "TRUE". 
 
 "freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15",
   Parameters used during variant calling.
