@@ -211,9 +211,9 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 "mapqual": 20,
   Read mapping quality threshold in BAM files. Integer. Parameter used in samtools view -q {}. It cannot be empty.
 
-"samtools_view_alignment_extra_filters": "-f 2 -F 1036",
+"samtools_view_alignment_extra_filters": "-f 2 -F 3084",
   Filters used for selecting mapped reads to be included in the BAM file.
-  Here it selects only paired reads (-f 2) and avoids optical duplicates, read and mate unmapped, (-F 1036).
+  Here it selects only paired reads (-f 2) and avoids optical duplicates, read and mate unmapped, suplementary alignment (-F 3084).
   If no filters are required, then set an empty string ("samtools_view_alignment_extra_filters": "",)
 
 "read_counts_per_gene": "FALSE",
@@ -223,7 +223,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 "freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15",
   Parameters used during variant calling.
   By default, freebayes exclude duplicates marked as such in alignments.
-  If you want to include duplicates, use the tag ``--use-duplicate-reads`` and use "-f 2 -F 12" in "samtools_view_alignment_extra_filters".
+  If you want to include duplicates, use the tag ``--use-duplicate-reads`` and use "-f 2 -F 2060" in "samtools_view_alignment_extra_filters".
   The flag ``-q --min-base-quality Q``, exclude alleles from analysis if their supporting base quality is less than Q.
 
 "vcffilter_qual": "'QUAL > 20'"
