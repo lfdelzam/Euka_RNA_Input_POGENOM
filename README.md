@@ -14,7 +14,6 @@ List of required software/packages:
 - `samtools <http://www.htslib.org/>`_
 - `vcflib <https://github.com/vcflib/vcflib>`_
 - `freebayes <https://github.com/ekg/freebayes>`_
-- `picard <https://broadinstitute.github.io/picard/>`_
 - `seqtk <https://github.com/lh3/seqtk>`_
 - `numpy <https://numpy.org/>`_
 - `python <https://www.python.org/>`_
