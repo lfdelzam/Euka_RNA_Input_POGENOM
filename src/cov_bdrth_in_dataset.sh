@@ -26,13 +26,7 @@ wkd=$(pwd)
 cov=$(cut -f4 $mpileupfile | grep -vw "0" | sort -n | awk ' { a[i++]=$1; } END { x=int((i+1)/2); if (x < (i+1)/2) print (a[x-1]+a[x])/2; else print a[x-1]; }')
 
 #---size
-check=$(echo "$dataset" | grep -c "_prefilt" )
-
-if [ "$check" -eq 1 ]; then
-   direct=$(echo "$dataset" | sed s/"_prefilt"//)
-else
-    direct="$dataset"
-fi
+direct=$(echo "$dataset" | sed s/"_prefilt"//)
 
 positions=$(awk 'BEGIN{i=0}; !/^>/ {i=i+length($0)} END {print i}' $wkd/RAW_DATA/Genomes/$direct/$mag$m_ext )
 
@@ -55,7 +49,6 @@ fi
 
 mkdir -p 04_mergeable/$dataset/$pdir/$mag
 bs_higherthan_min_cov=$(cut -f4 $mpileupfile | grep -vw "0" | sort -n | awk -v min=$mincov ' {if ($1 >= min) ++n} END { print n }')
-
 
 #---selection of BAM files
 if (( $(echo "$bs_higherthan_min_cov >= $minbreadth" | bc -l) )); then
