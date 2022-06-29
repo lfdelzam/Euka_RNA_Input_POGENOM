@@ -1,6 +1,6 @@
 {
   "workdir": "/abs/path/to/Euka_RNA_Input_POGENOM",
-  "dataset": "TEST,
+  "dataset": "TEST",
   "min_coverage": 10,
   "min_breadth": 10000,
   "min_bsq_for_cov_median_calculation": 15,
