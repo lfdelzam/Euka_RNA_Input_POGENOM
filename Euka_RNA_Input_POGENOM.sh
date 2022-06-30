@@ -74,7 +74,7 @@ if [[ "$read_counts_per_gene" == TRUE ]] && [ -z "$htseq_params" ]; then echo 'T
 # main - mode prefilt
          cd $workdir
          echo "INFO: Generating Reads subsets - Fraction used $fraction"
-         bash src/create_prefilt_Reads_subdir.sh $fraction $genomes_ext $reads_ext $temp_sub_Reads_dir $dataset
+         bash src/create_prefilt_Reads_subdir.sh $fraction $reads_ext $temp_sub_Reads_dir $dataset
          echo "INFO: Calculating Genome coverage - sub-samples - Coverage threshold $min_coverage"
          snakemake -s snakefiles/Euka_RNA_step_filter -j $threads $extra_params 2>log_files/samples_filter_$dataset.log
          if [[ "$remove_subreads" == TRUE ]] && test -d "$temp_sub_Reads_dir/Reads"; then
