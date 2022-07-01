@@ -49,7 +49,7 @@ Rds=($(ls $wd/RAW_DATA/Reads/$Dts/*$reads_ext))
 for r in "${Rds[@]}"
    do
       subsample_reads "$r" "$wd" "$dataset" "$fract" &
-      if [[ $(jobs -r -p | wc -l) -ge $maxjobs ]]; then wait -n; fi
+      if [[ $(jobs -r -p | wc -l) -ge $maxjobs ]]; then wait; fi
    done
 wait
 
