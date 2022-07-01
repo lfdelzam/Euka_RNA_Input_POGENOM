@@ -14,7 +14,8 @@ fract=$1
 reads_ext=$2
 dataset=$3
 Dts=$4
-
+#maxjobs=$(echo $(nproc --all)/2.2 | bc)
+maxjobs=$(echo $5/2.2 | bc)
 #--- Main ----
 
 mkdir -p $dataset/Reads/fraction_$fract
@@ -47,9 +48,11 @@ Rds=($(ls $wd/RAW_DATA/Reads/$Dts/*$reads_ext))
 
 for r in "${Rds[@]}"
    do
-     subsample_reads "$r" "$wd" "$dataset" "$fract" &
+      subsample_reads "$r" "$wd" "$dataset" "$fract" &
+      if [[ $(jobs -r -p | wc -l) -ge $maxjobs ]]; then wait -n; fi
    done
 wait
+
 end=`date +%s.%N`
 runtime=$( echo "$end - $start" | bc -l )
 echo "INFO: Subsampling reads done in $runtime (s)"
