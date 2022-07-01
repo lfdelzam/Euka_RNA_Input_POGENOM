@@ -220,7 +220,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
  
 "htseq_params": "-s no -t exon -i ID -m union --nonunique all --supplementary-alignments ignore", It is required when "read_counts_per_gene": "TRUE". 
 
-"freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15",
+"freebayes_parameters": "-C 4 -p 1 --pooled-continuous --read-max-mismatch-fraction 0.05 --min-alternate-fraction 0.01 -q 15 --report-monomorphic",
   Parameters used during variant calling.
   By default, freebayes exclude duplicates marked as such in alignments.
   If you want to include duplicates, use the tag ``--use-duplicate-reads`` and use "-f 2 -F 2060" in "samtools_view_alignment_extra_filters".
