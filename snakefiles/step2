@@ -60,11 +60,13 @@ rule freebayes:
              mag="RAW_DATA/Genomes/"+config["dataset"]+"/{prefix_mag}"+config["genomes_ext"],
              bam="05_BAM_merged/{dataset}/"+params_dir+"/{prefix_mag}_merged_sorted_position.bam",
              out="06_VCF/{dataset}/"+params_dir+"/{prefix_mag}.vcf",
+             outmono="06_VCF/{dataset}/"+params_dir+"/{prefix_mag}_monomorphic.vcf",
              log="06_VCF/{dataset}/"+params_dir+"/{prefix_mag}_samples.txt",
              qual=config["vcffilter_qual"]
      message: "Generating vcf file on {params.mag} using parameters {params.pr} and vcffilter {params.qual}"
      shell: """
                 samtools index {params.bam}
-                freebayes -f {params.mag} {params.bam} {params.pr} | vcffilter -f {params.qual} > {params.out}
+                freebayes -f {params.mag} {params.bam} {params.pr} > {params.outmono}
+                vcffilter -I {params.outmono} -f {params.qual} > {params.out}
                 vcfsamplenames {params.out} > {params.log}
             """
