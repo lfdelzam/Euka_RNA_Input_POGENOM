@@ -7,15 +7,14 @@ err_report() {
 
 trap 'err_report $LINENO' ERR
 
-start=`date +%s.%N`
+start=`date +%s`
 #---arguments---
 wd=$(pwd)
 fract=$1
 reads_ext=$2
 dataset=$3
 Dts=$4
-#maxjobs=$(echo $(nproc --all)/2.2 | bc)
-maxjobs=$(echo $5/2.2 | bc)
+maxjobs=$5
 #--- Main ----
 
 mkdir -p $dataset/Reads/fraction_$fract
@@ -25,8 +24,9 @@ subsample_reads() {
   wd=$2
   dataset=$3
   fract=$4
-
   read_file=$(basename $r)
+  echo "INFO: Working on $read_file"
+
    if ! test -s $wd/$dataset/Reads/fraction_$fract/$read_file  #If file doesn't exit or if it exist but it is empty
       then
            all_lines_in=$(gzip -cd $r | wc -l)
@@ -45,14 +45,24 @@ subsample_reads() {
 }
 
 Rds=($(ls $wd/RAW_DATA/Reads/$Dts/*$reads_ext))
+system_="linux"
+cat /proc/meminfo >/dev/null 2>/dev/null || system_="Mac"
 
 for r in "${Rds[@]}"
    do
-      subsample_reads "$r" "$wd" "$dataset" "$fract" &
-      if [[ $(jobs -r -p | wc -l) -ge $maxjobs ]]; then wait; fi
+      if [ "$system_" == "Mac" ]; then
+        memavble=$(memory_pressure | tail -1 | cut -d ":" -f2 | sed s/%// | tr -d " ")
+      else
+        memavble=$(mf=$(cat /proc/meminfo | grep "MemFree" | cut -d":" -f2 | sed s/"kB"// | tr -d " ");\
+                  mt=$(cat /proc/meminfo | grep "MemTotal" | cut -d":" -f2 | sed s/"kB"// | tr -d " ");\
+                  echo $(echo $mf*100/$mt | bc))
+      fi
+    subsample_reads "$r" "$wd" "$dataset" "$fract" &
+    if [ "$memavble" -le 2 ] || [ "$(jobs -r -p | wc -l)" -ge "$maxjobs" ]; then wait; fi
    done
 wait
 
-end=`date +%s.%N`
-runtime=$( echo "$end - $start" | bc -l )
-echo "INFO: Subsampling reads done in $runtime (s)"
+end=`date +%s`
+runtimes=$( echo "$end - $start" | bc -l )
+runtimem=$( printf "%.2f \n" $(echo $runtimes/60 | bc -l ) )
+echo "INFO: Subsampling reads done in (s) $runtimes | (min) $runtimem"
