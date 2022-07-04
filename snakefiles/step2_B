@@ -42,7 +42,7 @@ rule freebayes:
              log="06_VCF/"+dataset+"/"+params_dir+"/"+prefix_MAGs+"_samples.txt"
      message: "Generating vcf file on {input.mag} using parameters {params.pr} vcffilter {params.qual}"
      shell: """
-                samtools index {input.bam} --threads {threads}
+                samtools index {input.bam}
                 freebayes -f {input.mag} {input.bam} {params.pr} > {output.out2}
                 vcffilter -f {params.qual} {output.out2} > {output.out1}
                 vcfsamplenames {output.out1} > {params.log}
