@@ -67,6 +67,6 @@ rule freebayes:
      shell: """
                 samtools index {params.bam}
                 freebayes -f {params.mag} {params.bam} {params.pr} > {params.outmono}
-                vcffilter -I {params.outmono} -f {params.qual} > {params.out}
+                vcffilter -f {params.qual} {params.outmono} > {params.out}
                 vcfsamplenames {params.out} > {params.log}
             """
