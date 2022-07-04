@@ -44,6 +44,6 @@ rule freebayes:
      shell: """
                 samtools index {input.bam}
                 freebayes -f {input.mag} {input.bam} {params.pr} > {output.out2}
-                vcffilter -I {output.out2} -f {params.qual} > {output.out1}
+                vcffilter -f {params.qual} {output.out2} > {output.out1}
                 vcfsamplenames {output.out1} > {params.log}
             """
