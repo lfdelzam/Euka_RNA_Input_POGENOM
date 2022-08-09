@@ -204,7 +204,7 @@ In the "Euka_RNA_Input_POGENOM_config.json" file, set the parameters to be used.
 "rev_index": "_R2",
   Index used to define reverse reads.
 
-"hisat2_params": "--ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.03 --min-intronlen 20 --max-intronlen 500000",
+"hisat2_params": "--no-mixed --no-discordant --ignore-quals --mp 1,1 --np 1 --rdg 0,1 --rfg 0,1 --score-min L,0,-0.03 --min-intronlen 20 --max-intronlen 500000",
   hisat2 mapping parameters. The –score-min then gives the minimum score that is allowed to report an alignment.
   Here, it represents a 97% identity threshold.
 
