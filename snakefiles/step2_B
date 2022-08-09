@@ -43,7 +43,8 @@ rule freebayes:
      message: "Generating vcf file on {input.mag} using parameters {params.pr} vcffilter {params.qual}"
      shell: """
                 samtools index {input.bam}
-                freebayes -f {input.mag} {input.bam} {params.pr} > {output.out2}
+                samtools faidx {input.mag} -o {input.mag}.fai
+                freebayes-parallel <(fasta_generate_regions.py {input.mag}.fai 100000) {threads} -f {input.mag} {params.pr} {input.bam} > {output.out2}
                 vcffilter -f {params.qual} {output.out2} > {output.out1}
                 vcfsamplenames {output.out1} > {params.log}
             """
